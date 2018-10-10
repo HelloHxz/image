@@ -95,9 +95,7 @@ return {
     // the output bundle
 
     path: path.resolve(__dirname, 'dist'),
-    // 打包的时候将html输出到git根目录下面 方便发布 目录引用 加dist
-    // 正常： publicPath: isBuild?'./':'/'
-    publicPath: isBuild?'./dist/':'/'
+    publicPath: isBuild?'./':'/'
   },
  
   watchOptions: {
