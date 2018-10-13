@@ -12,7 +12,7 @@ function getEntryAndHtmlPlugin(siteArr,isBuild){
     re.htmlplugins.push(new HtmlWebpackPlugin({
         // 打包的时候将html输出到git根目录下面 方便发布
         // 正常的：filename: siteName+'.html', //打包出来的html名字
-        filename: isBuild?'../'+siteName+'.html':(siteName)+'.html', //打包出来的html名字
+        filename: (siteName)+'.html', //打包出来的html名字
         template: './'+siteName+'/index.html', //模版路径
         inject: 'body' ,
         chunks:[siteName],//js注入的名字
@@ -72,7 +72,7 @@ module.exports = function (env) {
   plugins = plugins.concat(entryAndHtmlPlugin.htmlplugins);
 
   if(isBuild){
-    // rmdirSync('./dist');
+    rmdirSync('./dist');
   }else{
     plugins.push(new webpack.HotModuleReplacementPlugin());
     // var ip = arguments["1"].host||"localhost";
@@ -90,7 +90,7 @@ return {
   mode:nodeEnv,
   entry:entry,
   output: {
-    filename: '[name].[hash:8].js',
+    filename: '[name].js',
     chunkFilename: !isBuild ? '[name].bundle.js' : '[name].[chunkhash:8].min.js',
     // the output bundle
 
@@ -142,6 +142,16 @@ return {
               }
             } ],
       },
+      {
+        test: require.resolve('jquery'),
+        use: [{
+           loader: 'expose-loader',
+           options: 'jQuery'
+        },{
+           loader: 'expose-loader',
+           options: '$'
+        }]
+     },
       { 
         test: /\.(png|jpg|jpeg|gif|woff)$/, 
         loader: 'url-loader?limit=6144&name=imgs/[path][name].[ext]'
