@@ -4,13 +4,14 @@ var fs = require('fs');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 
-function getEntryAndHtmlPlugin(siteArr,isBuild){
+function getEntryAndHtmlPlugin(siteMaps,isBuild){
   var re = {entry:{},htmlplugins:[]};
-  for(var i=0,j=siteArr.length;i<j;i++){
-    var siteName = siteArr[i];
-    re.entry[siteName] = "./"+siteName+"/index.js";//js多入口字典对象
-    re.htmlplugins.push(new HtmlWebpackPlugin({
-        // 打包的时候将html输出到git根目录下面 方便发布
+
+  for(var siteName in siteMaps) {
+    var sitInfo = siteMaps[siteName];
+    re.entry[siteName] = sitInfo.path;//js多入口字典对象
+    if(sitInfo.html) {
+      re.htmlplugins.push(new HtmlWebpackPlugin({
         // 正常的：filename: siteName+'.html', //打包出来的html名字
         filename: (siteName)+'.html', //打包出来的html名字
         template: './'+siteName+'/index.html', //模版路径
@@ -18,6 +19,7 @@ function getEntryAndHtmlPlugin(siteArr,isBuild){
         chunks:[siteName],//js注入的名字
         hash:true
       }));
+    }
   }
   return re;
 }
@@ -56,7 +58,11 @@ var rmdirSync = (function(){
 })();
 
 module.exports = function (env) {
-  const appList = ['mobile','pc'];
+  const appList = {
+     mobile: {html:true,path:"./mobile/index.js"},
+     pc:{html:true,path:"./pc/index.js"},
+     pcgallery:{html:false,path:"./pc/gallery.js"},
+  };
   const nodeEnv =  env.env || 'development';
   const action = env.action||'start';
   const isBuild = action==='build';
@@ -75,12 +81,6 @@ module.exports = function (env) {
     rmdirSync('./dist');
   }else{
     plugins.push(new webpack.HotModuleReplacementPlugin());
-    // var ip = arguments["1"].host||"localhost";
-    // var port = arguments["1"].port||8080;
-    // var url = "http://"+ip+":"+port;
-    // entry.dev_patch = 'react-hot-loader/patch';
-    // entry.dev_client = 'webpack-dev-server/client?'+url;
-    // entry.dev_server= 'webpack/hot/only-dev-server';
   }
 
 
@@ -92,8 +92,6 @@ return {
   output: {
     filename: '[name].js',
     chunkFilename: !isBuild ? '[name].bundle.js' : '[name].[chunkhash:8].min.js',
-    // the output bundle
-
     path: path.resolve(__dirname, 'dist'),
     publicPath: isBuild?'./':'/'
   },
@@ -110,7 +108,6 @@ return {
     rules: [
       {
         test: /\.jsx?$/,
-
         use: {
           loader:'babel-loader',
           options:{
@@ -124,7 +121,6 @@ return {
             ]
           }
         },
-        
       },
       {
         test: /\.css$/,
@@ -162,7 +158,6 @@ return {
       },
       {
             test: /\.less$/,
-           
             use: [{
                 loader: "style-loader" 
             }, {
@@ -189,7 +184,6 @@ return {
       }
     ],
   },
-
   plugins:plugins,
 };
 }

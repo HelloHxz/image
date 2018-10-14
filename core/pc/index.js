@@ -1,5 +1,5 @@
 require('jquery')
-import PCEditor from '../libs/editor';
+import PCEditor from '../libs/pc/editor';
 
 class PCImage {
 }
