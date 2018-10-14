@@ -1,6 +1,9 @@
-function Main() {
-    
-}
+require('jquery')
+import PCEditor from '../libs/editor';
 
-alert("asdas2d");
-export default Main;
+class PCImage {
+}
+console.log(new PCEditor());
+
+window.PCImage = PCImage;
+export default PCImage;

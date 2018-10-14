@@ -1,12 +1,15 @@
 ;(function(){
-    function WebImageEidtor() {
+    
+    function ImageEditor() {
     }
 
-    WebImageEidtor.prototype = {
-     
+    ImageEditor.prototype = {
+       Test: function(){
+           
+       }
     }
     
-    var moduleName = WebImageEidtor;
+    var moduleName = ImageEditor;
     if (typeof module !== 'undefined' && typeof exports === 'object') {
         var W = typeof window !== 'undefined' ? window : global;
         module.exports = moduleName;
@@ -14,7 +17,7 @@
         define(function() { return moduleName; });
     } else {
         var W = typeof window !== 'undefined' ? window : global;
-        W.WebImageEidtor = moduleName;
+        W.ImageEditor = moduleName;
     }
 }).call(function() {
     return this;

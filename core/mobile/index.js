@@ -1,4 +1,3 @@
-require('jquery')
 
 class Mobile{
     static Test() {
