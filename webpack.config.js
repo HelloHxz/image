@@ -86,7 +86,7 @@ module.exports = function (env) {
 
 
 return {
-  context: path.resolve(__dirname, './core'),
+  context: path.resolve(__dirname, './entry'),
   mode:nodeEnv,
   entry:entry,
   output: {
