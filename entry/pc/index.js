@@ -5,7 +5,7 @@ class PCDemo{
     }
 
     method = () => {
-        document.write("some method from instance! PCDemo");
+        document.write("success");
     }
 }
 

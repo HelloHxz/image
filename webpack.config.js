@@ -112,14 +112,10 @@ return {
           loader:'babel-loader',
           options:{
             "presets": [
-               '@babel/react',
+              "@babel/preset-env"
             ],
             "plugins": [
-                [
-                "@babel/transform-runtime",
-              ],
-              [
-                "@babel/plugin-proposal-class-properties",]
+              "@babel/plugin-proposal-class-properties",
             ]
           }
         },
