@@ -61,7 +61,7 @@ module.exports = function (env) {
   const appList = {
      mobile: {html:true,path:"./mobile/index.js"},
      pc:{html:true,path:"./pc/index.js"},
-     pcgallery:{html:false,path:"./pc/gallery.js"},
+    //  pcgallery:{html:false,path:"./pc/gallery.js"},
   };
   const nodeEnv =  env.env || 'development';
   const action = env.action||'start';
@@ -112,12 +112,14 @@ return {
           loader:'babel-loader',
           options:{
             "presets": [
-               '@babel/react'
+               '@babel/react',
             ],
             "plugins": [
                 [
-                "@babel/transform-runtime"
+                "@babel/transform-runtime",
               ],
+              [
+                "@babel/plugin-proposal-class-properties",]
             ]
           }
         },
