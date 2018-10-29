@@ -1,3 +1,4 @@
+import ImageList from '../../core/pc/list';
 
 class PCDemo{
     constructor(params){
@@ -10,7 +11,8 @@ class PCDemo{
 }
 
 window.onload = function() {
-    new PCDemo({s:'s'}).method();
+    const list = new ImageList();
+    list.show([{},{}]);
 }
 
 export default PCDemo;

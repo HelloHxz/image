@@ -1,7 +1,7 @@
 
 class ListItem{
-    static Test() {
-        alert("ss");
+    render = () => {
+        
     }
 }
 
