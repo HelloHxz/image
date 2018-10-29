@@ -1,12 +1,8 @@
 
-class Mobile{
+class MobileDemo{
     static Test() {
         alert("ss");
-        console.log($);
     }
 }
 
-window.XZMobile = Mobile;
-Mobile.Test();
-
-export default Mobile;
+export default MobileDemo;

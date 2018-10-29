@@ -1,9 +1,8 @@
-require('jquery')
-import PCEditor from '../libs/pc/editor';
 
-class PCImage {
+class PCDemo{
+    static Test() {
+        alert("ss");
+    }
 }
-console.log(new PCEditor());
 
-window.PCImage = PCImage;
-export default PCImage;
+export default PCDemo;
