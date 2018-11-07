@@ -55,3 +55,6 @@ fastlane/screenshots
 
 example/pc/react/node_modules
 example/pc/react/dist
+
+view/pc/react/node_modules
+view/pc/react/dist

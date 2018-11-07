@@ -1,10 +1,9 @@
 import 'babel-polyfill'
 import React from 'react';
 import ReactDOM from 'react-dom';
-import SNKEditor from 'image/core/pc/editor';
+import SNKEditor from '../../src/editor';
 import './index.less';
 
-console.log(SNKEditor);
 ReactDOM.render(
-	<div>asdas</div>,
+	<SNKEditor show/>,
 	document.getElementById('xz-lightapp-root'));

@@ -1,4 +1,4 @@
-import ImageList from '../../core/pc/list';
+import ImageEditor from '../../core/pc/editor';
 
 class PCDemo{
     constructor(params){
@@ -11,8 +11,16 @@ class PCDemo{
 }
 
 window.onload = function() {
-    const list = new ImageList();
-    list.show([{},{}]);
+    const root = document.getElementById("xz-lightapp-root");
+    const EditorBtn = document.createElement("button");
+    EditorBtn.innerHTML = 'show Editor';
+    EditorBtn.addEventListener('click',()=> {
+        const editor = new ImageEditor();
+        editor.show({
+            src:'https://www.sinosafe.com.cn/upload/cms/shop/201804/26181850g6tr.png'
+        });
+    });
+    root.appendChild(EditorBtn);
 }
 
 export default PCDemo;

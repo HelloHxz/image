@@ -1,4 +1,4 @@
-import ListItem from './listItem';
+import slideItem from './slideItem';
 
 class ImageList{
     constructor(){

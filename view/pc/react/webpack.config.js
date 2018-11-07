@@ -1,25 +1,24 @@
 const path = require('path');
 const webpack = require('webpack');
 var fs = require('fs');
+// var CopyWebpackPlugin = require('copy-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 
-function getEntryAndHtmlPlugin(siteMaps,isBuild){
+function getEntryAndHtmlPlugin(siteArr,isBuild){
   var re = {entry:{},htmlplugins:[]};
-
-  for(var siteName in siteMaps) {
-    var sitInfo = siteMaps[siteName];
-    re.entry[siteName] = sitInfo.path;//js多入口字典对象
-    if(sitInfo.html) {
-      re.htmlplugins.push(new HtmlWebpackPlugin({
+  for(var i=0,j=siteArr.length;i<j;i++){
+    var siteName = siteArr[i];
+    re.entry[siteName] = "./"+siteName+"/index.js";//js多入口字典对象
+    re.htmlplugins.push(new HtmlWebpackPlugin({
+        // 打包的时候将html输出到git根目录下面 方便发布
         // 正常的：filename: siteName+'.html', //打包出来的html名字
         filename: (siteName)+'.html', //打包出来的html名字
-        template: './entry/'+siteName+'/index.html', //模版路径
+        template: './'+siteName+'/index.html', //模版路径
         inject: 'body' ,
         chunks:[siteName],//js注入的名字
         hash:true
       }));
-    }
   }
   return re;
 }
@@ -58,11 +57,7 @@ var rmdirSync = (function(){
 })();
 
 module.exports = function (env) {
-  const appList = {
-     mobile: {html:true,path:"./entry/mobile/index.js"},
-     pc:{html:true,path:"./entry/pc/index.js"},
-     pceditor:{html:false,path:"./core/pc/editor/index.js"},
-  };
+  const appList = ['index'];
   const nodeEnv =  env.env || 'development';
   const action = env.action||'start';
   const isBuild = action==='build';
@@ -81,18 +76,27 @@ module.exports = function (env) {
     rmdirSync('./dist');
   }else{
     plugins.push(new webpack.HotModuleReplacementPlugin());
+    var ip = arguments["1"].host||"localhost";
+    var port =   arguments["1"].port||8080;
+    var url = "http://"+ip+":"+port;
+    entry.dev_patch = 'react-hot-loader/patch';
+    entry.dev_client = 'webpack-dev-server/client?'+url;
+    entry.dev_server= 'webpack/hot/only-dev-server';
   }
 
 
 
 return {
-  context: path.resolve(__dirname, './'),
+  context: path.resolve(__dirname, 'app'),
   mode:nodeEnv,
   entry:entry,
   output: {
-    filename: '[name].js',
+    filename: '[name].[hash:8].js',
     chunkFilename: !isBuild ? '[name].bundle.js' : '[name].[chunkhash:8].min.js',
+    // the output bundle
+
     path: path.resolve(__dirname, 'dist'),
+    // 打包的时候将html输出到git根目录下面 方便发布 目录引用 加dist
     publicPath: isBuild?'./':'/'
   },
  
@@ -100,28 +104,72 @@ return {
     poll: true
   },
   devtool: isBuild ? 'cheap-module-source-map':'#source-map',
+  devServer: {
+    hot: true,
+    // enable HMR on the server
+    contentBase: path.resolve(__dirname, 'dist'),
+    // match the output path
+    publicPath: isBuild?'./':'/',
+    //支持historyState
+    //historyApiFallback:true ???
+    historyApiFallback:{
+      index:isBuild?'./':'/'+appList[0]+'.html',
+      // rewrites: [
+      //   { from: /^\/admin/, to: 'build/admin.html' }
+      // ],
+    },
+  },
   resolve: {
      mainFiles: ["index.web","index"],
      modules: [path.resolve(__dirname, "src"), "node_modules"]
   },
+
+
   module: {
     rules: [
       {
         test: /\.jsx?$/,
+        include: [
+          path.resolve(__dirname, "node_modules/image"),
+          path.resolve(__dirname, ''),
+        ],
         use: {
           loader:'babel-loader',
           options:{
             "presets": [
-              "@babel/preset-env"
+              "react",
+              "env",
+              "stage-3"
             ],
             "plugins": [
-              "@babel/plugin-proposal-class-properties",
-            ]
+              "syntax-dynamic-import",
+            "transform-decorators-legacy",
+            "transform-class-properties",
+            "react-hot-loader/babel",[
+              "transform-runtime",
+              {
+                "helpers": false,
+                "polyfill": false,
+                "regenerator": true,
+                "moduleName": "babel-runtime"
+              }
+            ],
+          ]
           }
         },
+        
+      },
+      {
+          test: /\.md$/,
+          use: [
+              {
+                  loader: "raw-loader"
+              }
+          ]
       },
       {
         test: /\.css$/,
+       
         use: [ 'style-loader', 
             {
                 loader: "css-loader",
@@ -136,6 +184,14 @@ return {
               }
             } ],
       },
+      { 
+        test: /\.(png|jpg|jpeg|gif|woff)$/, 
+        loader: 'url-loader?limit=6144&name=imgs/[path][name].[ext]'
+      },
+       {
+          test: /\.(eot|svg|ttf|woff|woff2)$/,
+          loader: 'file-loader?name=fonts/[name].[ext]'
+      },
       {
         test: require.resolve('jquery'),
         use: [{
@@ -146,16 +202,9 @@ return {
            options: '$'
         }]
      },
-      { 
-        test: /\.(png|jpg|jpeg|gif|woff)$/, 
-        loader: 'url-loader?limit=6144&name=imgs/[path][name].[ext]'
-      },
-       {
-          test: /\.(eot|svg|ttf|woff|woff2)$/,
-          loader: 'file-loader?name=fonts/[name].[ext]'
-      },
       {
             test: /\.less$/,
+           
             use: [{
                 loader: "style-loader" 
             }, {
@@ -182,6 +231,9 @@ return {
       }
     ],
   },
+
   plugins:plugins,
 };
 }
+
+
