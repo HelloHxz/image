@@ -121,6 +121,7 @@ return {
   },
   resolve: {
      mainFiles: ["index.web","index"],
+     symlinks: false,
      modules: [path.resolve(__dirname, "src"), "node_modules"]
   },
 
@@ -130,30 +131,18 @@ return {
       {
         test: /\.jsx?$/,
         include: [
-          path.resolve(__dirname, "node_modules/image"),
           path.resolve(__dirname, ''),
+          path.resolve(__dirname, 'node_modules/image'),
         ],
         use: {
           loader:'babel-loader',
           options:{
             "presets": [
-              "react",
-              "env",
-              "stage-3"
+              "@babel/preset-react",
+              "@babel/preset-env",
             ],
             "plugins": [
-              "syntax-dynamic-import",
-            "transform-decorators-legacy",
-            "transform-class-properties",
-            "react-hot-loader/babel",[
-              "transform-runtime",
-              {
-                "helpers": false,
-                "polyfill": false,
-                "regenerator": true,
-                "moduleName": "babel-runtime"
-              }
-            ],
+              "@babel/plugin-proposal-class-properties",
           ]
           }
         },

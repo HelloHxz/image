@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
-    "image": "file:../../../",
     "es6-promise": "^4.1.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1"

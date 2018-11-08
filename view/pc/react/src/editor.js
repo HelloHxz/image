@@ -1,5 +1,5 @@
 import React from 'react';
-import Editor from 'image/core/pc/editor';
+import Editor from '../../../../core/pc/editor';
 
 export default class SNKEditor extends React.Component {
     constructor(props) {
@@ -33,6 +33,8 @@ export default class SNKEditor extends React.Component {
         }
     }
     render(){
-        return <span />;
+        return (
+           <div>xxxx</div>
+        );
     }
 }
