@@ -76,12 +76,6 @@ module.exports = function (env) {
     rmdirSync('./dist');
   }else{
     plugins.push(new webpack.HotModuleReplacementPlugin());
-    var ip = arguments["1"].host||"localhost";
-    var port =   arguments["1"].port||8080;
-    var url = "http://"+ip+":"+port;
-    entry.dev_patch = 'react-hot-loader/patch';
-    entry.dev_client = 'webpack-dev-server/client?'+url;
-    entry.dev_server= 'webpack/hot/only-dev-server';
   }
 
 
