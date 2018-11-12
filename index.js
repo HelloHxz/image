@@ -1,3 +1,3 @@
 export default {
-    v:'0.0.1-new'
+    v:'0.0.1-bc-1'
 };
