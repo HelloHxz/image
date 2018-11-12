@@ -1,3 +1,3 @@
 export default {
-    S:'ssss'
+    v:'0.0.1'
 };
