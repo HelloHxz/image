@@ -4,8 +4,6 @@ var fs = require('fs');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 
-
-
 var rmdirSync = (function(){
   function iterator(url,dirs){
       var stat = fs.statSync(url);

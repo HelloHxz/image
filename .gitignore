@@ -53,5 +53,4 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
 
-example/pc/react/node_modules
-example/pc/react/dist
+dist/
