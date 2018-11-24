@@ -4,25 +4,6 @@ var fs = require('fs');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 
-function getEntryAndHtmlPlugin(siteMaps,isBuild){
-  var re = {entry:{},htmlplugins:[]};
-
-  for(var siteName in siteMaps) {
-    var sitInfo = siteMaps[siteName];
-    re.entry[siteName] = sitInfo.path;//js多入口字典对象
-    if(sitInfo.html) {
-      re.htmlplugins.push(new HtmlWebpackPlugin({
-        // 正常的：filename: siteName+'.html', //打包出来的html名字
-        filename: (siteName)+'.html', //打包出来的html名字
-        template: './'+siteName+'/index.html', //模版路径
-        inject: 'body' ,
-        chunks:[siteName],//js注入的名字
-        hash:true
-      }));
-    }
-  }
-  return re;
-}
 
 
 var rmdirSync = (function(){
@@ -58,16 +39,12 @@ var rmdirSync = (function(){
 })();
 
 module.exports = function (env) {
-  const appList = {
-     mobile: {html:true,path:"./mobile/index.js"},
-     pc:{html:true,path:"./pc/index.js"},
-     pcgallery:{html:false,path:"./pc/gallery.js"},
-  };
   const nodeEnv =  env.env || 'development';
   const action = env.action||'start';
   const isBuild = action==='build';
-  var entryAndHtmlPlugin = getEntryAndHtmlPlugin(appList,isBuild);
-  var entry = entryAndHtmlPlugin.entry;
+  var entry = {
+    index:'./index.js'
+  };
   var plugins= [
       new webpack.NamedModulesPlugin(),
       new webpack.LoaderOptionsPlugin({
@@ -75,7 +52,13 @@ module.exports = function (env) {
       }),
   ];
 
-  plugins = plugins.concat(entryAndHtmlPlugin.htmlplugins);
+  plugins = plugins.concat([new HtmlWebpackPlugin({
+    filename: 'index.html', //打包出来的html名字
+    template: './index.html', //模版路径
+    inject: 'body' ,
+    chunks:['index'],//js注入的名字
+    hash:true
+  })]);
 
   if(isBuild){
     rmdirSync('./dist');
@@ -86,7 +69,7 @@ module.exports = function (env) {
 
 
 return {
-  context: path.resolve(__dirname, './core'),
+  context: path.resolve(__dirname, './'),
   mode:nodeEnv,
   entry:entry,
   output: {
@@ -112,12 +95,10 @@ return {
           loader:'babel-loader',
           options:{
             "presets": [
-               '@babel/react'
+              "@babel/preset-env"
             ],
             "plugins": [
-                [
-                "@babel/transform-runtime"
-              ],
+              "@babel/plugin-proposal-class-properties",
             ]
           }
         },

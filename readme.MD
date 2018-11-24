@@ -1,3 +1,11 @@
-## 
-> http://127.0.0.1:8080/mobile.html
-> http://127.0.0.1:8080/pc.html
+
+
+
+
+> npm install 
+
+
+> npm start
+
+
+> http://localhost:8080/index.html
